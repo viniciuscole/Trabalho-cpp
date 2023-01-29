@@ -9,7 +9,7 @@ using namespace std;
 
 class Partido
 {
-    list<Candidato> candidatos = list<Candidato>();
+    list<Candidato*> candidatos = list<Candidato*>();
     string sigla;
     int numero;
     int votosLegenda = 0;
@@ -24,7 +24,7 @@ class Partido
     int getVotosNominais();
     int getVotosTotais();
     void addVotosLegenda(int votosLegenda);
-    void addCandidato(Candidato candidato);
+    void addCandidato(Candidato* candidato);
 };
 
 #endif //PARTIDO_H

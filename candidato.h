@@ -19,7 +19,7 @@ class Candidato
     int situacaoEleito;
     int genero;
     int votos=0;
-    Partido partido;
+    Partido* partido;
     
     public: 
     
@@ -34,8 +34,8 @@ class Candidato
     int getSituacaoEleito();
     int getGenero();
     int getVotos();
-    Partido getPartido();
-    void setPartido(Partido partido);
+    Partido* getPartido();
+    void setPartido(Partido* partido);
     void addVotos(int votos);
     string toString();
 
