@@ -17,7 +17,7 @@ class Partido
     public:
     
     Partido(string sigla, int numero);
-    list<Candidato> getCandidatos();
+    list<Candidato*> getCandidatos();
     string getSigla();
     int getNumero();
     int getVotosLegenda();

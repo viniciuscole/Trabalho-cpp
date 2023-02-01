@@ -1,5 +1,10 @@
 #include "processamento.h"
 
+Processamento::Processamento(vector<string> linhas)
+{
+    this->linhas = linhas;
+}
+
 bool Processamento::compare_pt_BR(const string &s1, const string &s2)
 {
     locale loc = locale("pt_BR.UTF-8");
@@ -27,10 +32,6 @@ string Processamento::iso_8859_1_to_utf8(string &str)
     return strOut;
 }
 
-Processamento::Processamento(vector<string> linhas)
-{
-    this->linhas = linhas;
-}
 
 void Processamento::processar(int tipoDeEleicao)
 {

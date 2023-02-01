@@ -7,9 +7,9 @@ Partido::Partido(string sigla, int numero)
     this->numero = numero;
 }
 
-list<Candidato> Partido::getCandidatos()
+list<Candidato*> Partido::getCandidatos()
 {
-    return list<Candidato>();
+    return this->candidatos;
 }
 
 string Partido::getSigla()

@@ -3,7 +3,10 @@
 
 #include <list>
 #include <time.h>
+#include <iostream>
+#include <locale>
 
+using namespace std;
 
 #include "candidato.h"
 #include "partido.h"
@@ -15,9 +18,27 @@ class Relatorios
     list<Candidato*> candidatosEleitosOrdenados;
     int tipoDeEleicao;
     time_t dataDaEleicao;
+    locale loc = locale("pt_BR.UTF-8");
+    string transformaMaisculo(string str);
+    bool checaSeCandidatoEstaNaLista(list<Candidato*> lista, Candidato* candidato);
     public:
         Relatorios(time_t dataDaEleicao, int tipoDeEleicao);
-        //decidir se os candidatos serão parte do construtor ou se serão passados por parâmetro
+        void setCandidatos(list<Candidato*> candidatos);
+        void setPartidos(list<Partido*> partidos);
+        void setCandidatosEleitos(list<Candidato*> candidatosEleitos);
+        void setLocale(locale loc);
+        void gerarRelatorios();
+        void gerarRelatorio1();
+        void gerarRelatorio2();
+        void gerarRelatorio3();
+        void gerarRelatorio4();
+        void gerarRelatorio5();
+        void gerarRelatorio6();
+        //void gerarRelatorio7();
+        void gerarRelatorio8();
+        void gerarRelatorio9();
+        void gerarRelatorio10();
+        void gerarRelatorio11();
 };
 
 
