@@ -17,12 +17,12 @@ class Relatorios
     list<Partido*> partidosOrdenados;
     list<Candidato*> candidatosEleitosOrdenados;
     int tipoDeEleicao;
-    time_t dataDaEleicao;
+    string dataDaEleicao;
     locale loc = locale("pt_BR.UTF-8");
     string transformaMaisculo(string str);
     bool checaSeCandidatoEstaNaLista(list<Candidato*> lista, Candidato* candidato);
     public:
-        Relatorios(time_t dataDaEleicao, int tipoDeEleicao);
+        Relatorios(string dataDaEleicao, int tipoDeEleicao);
         void setCandidatos(list<Candidato*> candidatos);
         void setPartidos(list<Partido*> partidos);
         void setCandidatosEleitos(list<Candidato*> candidatosEleitos);

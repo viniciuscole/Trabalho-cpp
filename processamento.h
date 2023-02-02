@@ -11,6 +11,7 @@
 #include <chrono>
 
 #include "candidato.h"
+#include "relatorios.h"
 
 #define tipoCandidatoIndice 13
 #define situacaoIndice 68
@@ -24,6 +25,10 @@
 #define generoIndice 45
 #define tipoVotoIndice 67
 
+#define cargoIndice 17
+#define numeroVotadoIndice 19
+#define qtdVotosIndice 21
+
 using namespace std;
 
 class Processamento
@@ -32,16 +37,20 @@ class Processamento
     string iso_8859_1_to_utf8(string &str);
     map<int, Candidato*> candidatos = map<int, Candidato*>();
     map<int, Partido*> partidos = map<int, Partido*>();
-    vector<string> linhas = vector<string>();
+    int tipoDeEleicao = -1;
+    vector<string> linhasArquivoCandidatos = vector<string>();
+    vector<string> linhasArquivoVotos = vector<string>();
     vector<string> separaPalavraPorChar(string str, char delimitador);
+    int ehMaisVelho(string dataNascimento1, string dataNascimento2);
     public:
-        Processamento(vector <string> linhas);
+        Processamento(vector <string> linhasArquivoCandidatos, vector<string> linhasArquivoVotos, int tipoDeEleicao);
         void processar(int tipoDeEleicao);
-        void processarEleicaoDeputadosEstaduais();
-        void processarEleicaoDeputadosFederais();
+        void gerarRelatorios(string dataDaEleicao, int tipoDeEleicao);
         void gerarCandidatos();
         void gerarPartido(int numeroPartido, string siglaPartido);
         void gerarVotos();
+        void deletarCandidatos();
+        void deletarPartidos();
         map<int, Candidato*> elegeCandidatos(map<int, Candidato*> candidatos);
         list<Candidato*> ordenaCandidatosEmLista(map<int, Candidato*> candidatos);
         list<Partido*>  ordenaPartidosEmLista(map<int, Partido*> partidos);

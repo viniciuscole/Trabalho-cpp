@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Candidato::Candidato(int tipoCandidato, int situacao, int numeroCandidato, string nome, int numeroFederacao, time_t dataNascimento, int situacaoEleito, int genero){
+Candidato::Candidato(int tipoCandidato, int situacao, int numeroCandidato, string nome, int numeroFederacao, string dataNascimento, int situacaoEleito, int genero, int ehCandidatoLegenda){
 
     this->tipoCandidato = tipoCandidato;
     this->situacao = situacao;
@@ -15,6 +15,7 @@ Candidato::Candidato(int tipoCandidato, int situacao, int numeroCandidato, strin
     this->dataNascimento = dataNascimento;
     this->situacaoEleito = situacaoEleito;
     this->genero = genero;
+    this->ehCandidatoLegenda = ehCandidatoLegenda;
 };
 int Candidato::getTipoCandidato()
 {
@@ -36,7 +37,7 @@ int Candidato::getNumeroFederacao()
 {
     return this->numeroFederacao;
 }
-time_t Candidato::getDataNascimento()
+string Candidato::getDataNascimento()
 {
     return this->dataNascimento;
 }
@@ -52,7 +53,11 @@ int Candidato::getVotos()
 {
     return this->votos;
 }
-Partido* Candidato::Candidato::getPartido()
+int Candidato::getEhCandidatoLegenda()
+{
+    return this->ehCandidatoLegenda;
+}
+Partido *Candidato::Candidato::getPartido()
 {
     return this->partido;
 }
@@ -70,6 +75,6 @@ string Candidato::toString()
     return       std::string("Candidato [tipoCandidato=") + std::to_string(tipoCandidato) + ", situacao=" + std::to_string(situacao) + ", numeroCandidato="
                 + std::to_string(numeroCandidato) + ", nome="
                 + nome + ", numeroFederacao="
-                + std::to_string(numeroFederacao) + ", dataNascimento=" + std::to_string(dataNascimento) + ", situacaoEleito=" + std::to_string(situacaoEleito)
-                + ", genero=" + std::to_string(genero) + ", votos=" + std::to_string(votos) + "]";
+                + std::to_string(numeroFederacao) + ", dataNascimento=" + dataNascimento + ", situacaoEleito=" + std::to_string(situacaoEleito)
+                + ", genero=" + std::to_string(genero) + ", votos=" + std::to_string(votos) + ", é de legenda:" + std::to_string(ehCandidatoLegenda) + "]";
 }

@@ -17,9 +17,10 @@ class Leitor
     string caminho;
     locale loc;
     public:
-        Leitor(string caminho);
+        Leitor();
         void setCaminho(string caminho);
-        vector<string> ler();
+        vector<string> lerArquivoCandidatos();
+        vector<string> lerArquivoVotos();
     
 };
 

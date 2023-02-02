@@ -1,6 +1,6 @@
 #include "relatorios.h"
 
-Relatorios::Relatorios(time_t dataDaEleicao, int tipoDeEleicao)
+Relatorios::Relatorios(string dataDaEleicao, int tipoDeEleicao)
 {
     this->dataDaEleicao = dataDaEleicao;
     this->tipoDeEleicao = tipoDeEleicao;
