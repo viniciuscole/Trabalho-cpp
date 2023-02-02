@@ -2,3 +2,4 @@ testes/
 test.sh
 build/
 .vscode/
+*.o

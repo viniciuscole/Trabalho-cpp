@@ -1,5 +1,8 @@
 #include "processamento.h"
 
+#include "relatorios.h"
+#include "candidato.h"
+#include "partido.h"
 
 //private
 

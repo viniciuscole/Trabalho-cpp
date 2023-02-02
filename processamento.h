@@ -10,8 +10,8 @@
 #include <sstream>
 #include <chrono>
 
-#include "candidato.h"
-#include "relatorios.h"
+class Candidato;
+class Partido;
 
 #define tipoCandidatoIndice 13
 #define situacaoIndice 68

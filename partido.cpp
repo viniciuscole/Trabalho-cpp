@@ -1,5 +1,7 @@
 #include "partido.h"
-#include <list>
+#include "candidato.h"
+
+
 
 Partido::Partido(string sigla, int numero)
 {

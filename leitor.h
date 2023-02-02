@@ -8,8 +8,6 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "partido.h"
-#include "candidato.h"
 
 using namespace std;
 class Leitor

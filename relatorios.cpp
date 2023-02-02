@@ -1,4 +1,8 @@
+
 #include "relatorios.h"
+#include "candidato.h"
+#include "partido.h"
+
 
 Relatorios::Relatorios(string dataDaEleicao, int tipoDeEleicao)
 {
@@ -62,10 +66,10 @@ void Relatorios::gerarRelatorios()
     gerarRelatorio5();
     gerarRelatorio6();
     //gerarRelatorio7();
-    gerarRelatorio8();
-    gerarRelatorio9();
-    gerarRelatorio10();
-    gerarRelatorio11();
+    //gerarRelatorio8();
+    //gerarRelatorio9();
+    //gerarRelatorio10();
+    //gerarRelatorio11();
 }
 
 void Relatorios::gerarRelatorio1()

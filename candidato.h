@@ -2,6 +2,7 @@
 #define CANDIDATO_H
 
 #include <string>
+
 #include "partido.h"
 
 using namespace std;

@@ -2,6 +2,7 @@
 #include <ctime>
 
 #include "candidato.h"
+#include "partido.h"
 
 using namespace std;
 

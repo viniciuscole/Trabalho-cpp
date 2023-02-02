@@ -3,7 +3,8 @@
 
 #include <string>
 #include <list>
-#include "candidato.h"
+
+class Candidato;
 
 using namespace std;
 
