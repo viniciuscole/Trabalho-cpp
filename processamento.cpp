@@ -1,5 +1,23 @@
 #include "processamento.h"
 
+
+//private
+
+    vector<string> separaPalavraPorChar(string str, char delimitador) {
+        vector<string> palavras;
+        stringstream ss(str);
+        string palavra;
+        
+        while(getline(ss, palavra, delimitador)) {
+            palavras.push_back(palavra);
+        }
+        
+        return palavras;
+    }
+
+//
+
+
 Processamento::Processamento(vector<string> linhas)
 {
     this->linhas = linhas;
@@ -41,7 +59,7 @@ void Processamento::processar(int tipoDeEleicao)
         processarEleicaoDeputadosEstaduais();
         break;
     case 2:
-        processarEleicaoDeputadosFedereais();
+        processarEleicaoDeputadosFederais();
         break;
     default:
         break;
@@ -50,10 +68,71 @@ void Processamento::processar(int tipoDeEleicao)
 
 void Processamento::processarEleicaoDeputadosEstaduais()
 {
-
+    
 }
 
-void Processamento::processarEleicaoDeputadosFedereais()
+void Processamento::processarEleicaoDeputadosFederais()
+{
+}
+
+void Processamento::gerarCandidatos()
+{
+    vector<string> informacoes;
+    for(string linhaIso : linhas)
+    {
+        string linha = iso_8859_1_to_utf8(linhaIso);
+        informacoes = separaPalavraPorChar(linha, ';');
+        int tipoCandidato = stoi
+        (informacoes[tipoCandidatoIndice].substr(1, informacoes[tipoCandidatoIndice].size() - 2));  //retira aspas
+        int situacao = stoi(informacoes[situacaoIndice].substr(1, informacoes[situacaoIndice].size() - 2));
+        int numeroCandidato = stoi(informacoes[numeroCandidatoIndice].substr(1, informacoes[numeroCandidatoIndice].size() - 2));
+        string nome = informacoes[nomeIndice].substr(1, informacoes[nomeIndice].size() - 2);
+        int numeroPartido = stoi(informacoes[numeroPartidoIndice].substr(1, informacoes[numeroPartidoIndice].size() - 2));
+        string siglaPartido = informacoes[siglaPartidoIndice].substr(1, informacoes[siglaPartidoIndice].size() - 2);
+        int numeroFederacao = stoi(informacoes[numeroFederacaoIndice].substr(1, informacoes[numeroFederacaoIndice].size() - 2));
+
+        string dataNascimentoStr = informacoes[dataNascimentoIndice].substr(1, informacoes[dataNascimentoIndice].size() - 2);
+        istringstream dataNascimentoStream(dataNascimentoStr);
+        tm dataNascimento = {};
+        dataNascimentoStream >> get_time(&dataNascimento, "%d/%m/%Y");
+        if(dataNascimentoStream.fail())
+        {
+            cout << "Erro ao converter data de nascimento" << endl;
+            exit(1);
+        }
+        auto dataNascimentoTime = mktime(&dataNascimento);
+        int situacaoEleito = stoi(informacoes[situacaoEleitoIndice].substr(1, informacoes[situacaoEleitoIndice].size() - 2));
+        int tipoVoto = stoi(informacoes[tipoVotoIndice].substr(1, informacoes[tipoVotoIndice].size() - 2));
+
+
+        bool partidoJaExiste = false;
+        for(const auto& partido : partidos)
+        {
+            if(partido.second->getNumero() == numeroPartido)
+            {
+                partidoJaExiste = true;
+                break;
+            }
+        }
+        if(!partidoJaExiste)
+        {
+            gerarPartido(numeroPartido, siglaPartido);
+        }
+
+
+
+
+
+    }
+}
+
+void Processamento::gerarPartido(int numeroPartido, string siglaPartido)
+{
+    Partido* partido = new Partido(siglaPartido, numeroPartido);
+    partidos.insert(pair<int, Partido*>(numeroPartido, partido));
+}
+
+void Processamento::gerarVotos()
 {
 }
 

@@ -1,17 +1,5 @@
 #include "leitor.h"
 
-#define tipoCandidatoIndice 13;
-#define situacaoIndice 68;
-#define numeroCandidatoIndice 16;
-#define nomeIndice 18;
-#define numeroPartidoIndice 27;
-#define siglaPartidoIndice 28;
-#define numeroFederacaoIndice 30;
-#define dataNascimentoIndice 42;
-#define situacaoEleitIndice 56;
-#define generoIndice 45;
-#define tipoVotoIndice 67;
-
 Leitor::Leitor(string caminho)
 {
     this->caminho = caminho;

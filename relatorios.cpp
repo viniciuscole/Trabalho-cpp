@@ -279,3 +279,4 @@ void Relatorios::gerarRelatorio8()
     cout << "Primeiro e último colocados de cada partido:" << endl;
     //TODO
 }
+
