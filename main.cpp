@@ -42,6 +42,8 @@ int main(int argc, char const *argv[]){
     processamento.gerarRelatorios(data, tipo);
     processamento.deletarCandidatos();
     processamento.deletarPartidos();
+
+    
     
 
     return 0;

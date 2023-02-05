@@ -19,7 +19,7 @@
     }
 
 
-    int Processamento::ehMaisVelho(string dataNascimento1, string dataNascimento2)
+    bool Processamento::ehMaisVelho(string dataNascimento1, string dataNascimento2)
     {
         vector<string> data1 = separaPalavraPorChar(dataNascimento1, '/');
         vector<string> data2 = separaPalavraPorChar(dataNascimento2, '/');
@@ -31,39 +31,40 @@
         int dia2 = stoi(data2[0]);
         if(ano1 < ano2)
         {
-            return 1;
+            return true;
         }
         else if(ano1 > ano2)
         {
-            return -1;
+            return false;
         }
         else
         {
             if(mes1 < mes2)
             {
-                return 1;
+                return true;
             }
             else if(mes1 > mes2)
             {
-                return -1;
+                return false;
             }
             else
             {
                 if(dia1 < dia2)
                 {
-                    return 1;
+                    return true;
                 }
                 else if(dia1 > dia2)
                 {
-                    return -1;
+                    return false;
                 }
                 else
                 {
-                    return 0;
+                    return false;
                 }
             }
         }
     }
+
 
     bool Processamento::compare_pt_BR(const string &s1, const string &s2)
     {
@@ -108,17 +109,14 @@ void Processamento::processar(int tipoDeEleicao)
 {
     gerarCandidatos();
     gerarVotos();
-    cout << "Votos gerados" << endl;
 }
 
 void Processamento::gerarRelatorios(string dataEleicao, int tipoDeEleicao)
 {
-    cout << "entrou aqui" << endl;
     Relatorios relatorio = Relatorios(dataEleicao, tipoDeEleicao);
     relatorio.setCandidatos(ordenaCandidatosEmLista(candidatos));
     relatorio.setCandidatosEleitos(ordenaCandidatosEmLista(elegeCandidatos(candidatos)));
     relatorio.setPartidos(ordenaPartidosEmLista(partidos));
-    cout << "entrou aqui 4" << endl;
     relatorio.gerarRelatorios();
 }
 
@@ -126,7 +124,7 @@ void Processamento::gerarCandidatos()
 {
     vector<string> informacoes;
 
-
+    int i = 0;
     for(string linhaIso : linhasArquivoCandidatos)
     {   
         if(linhaIso == linhasArquivoCandidatos[0])
@@ -162,39 +160,40 @@ void Processamento::gerarCandidatos()
         if(!partidoJaExiste)
         {
             gerarPartido(numeroPartido, siglaPartido);
-        }
+        } 
 
-        if(compare_pt_BR(tipoVoto, "Válido (legenda)")) //candidato de voto destinado ao partido
+        if(tipoVoto == "Válido (legenda)") //candidato de voto destinado ao partido
         {
             Candidato* candidato = new Candidato(tipoCandidato, situacao, numeroCandidato, nome, numeroFederacao,
-                        dataNascimento, situacaoEleito, genero, 1);
-
+                        dataNascimento, situacaoEleito, genero, true);
             candidatos.insert(pair<int, Candidato*>(numeroCandidato, candidato));
             partidos[numeroPartido]->addCandidato(candidato);
             candidato->setPartido(partidos[numeroPartido]);
+            i++;
         }
         else if ((situacao==2 || situacao==16))
-        {
+        {   
             switch(tipoDeEleicao)
-            {
+            {   
                 case -1:
                     cout << "Tipo de eleição não definido" << endl;
-                    exit(1);
+                    break;
                 case 0:
                     if(tipoCandidato==6)
                     {
                         Candidato* candidato = new Candidato(tipoCandidato, situacao, numeroCandidato, nome, numeroFederacao,
-                        dataNascimento, situacaoEleito, genero, 0);
+                        dataNascimento, situacaoEleito, genero, false);
                         candidatos.insert(pair<int, Candidato*>(numeroCandidato, candidato));
                         partidos[numeroPartido]->addCandidato(candidato);
                         candidato->setPartido(partidos[numeroPartido]);
+                        i++;
                     }
                     break;
                 case 1:
                     if(tipoCandidato==7)
                     {
                         Candidato* candidato = new Candidato(tipoCandidato, situacao, numeroCandidato, nome, numeroFederacao,
-                        dataNascimento, situacaoEleito, genero, 0);
+                        dataNascimento, situacaoEleito, genero, false);
                         candidatos.insert(pair<int, Candidato*>(numeroCandidato, candidato));
                         partidos[numeroPartido]->addCandidato(candidato);
                         candidato->setPartido(partidos[numeroPartido]);
@@ -237,42 +236,42 @@ void Processamento::gerarVotos()
             {
                 case -1:
                     cout << "Tipo de eleição não definido" << endl;
-                    exit(1);
+                    break;
                 case 0:
                     if(cargo==6)
-                    {   
+                    {  
+
                         if(partidos[numeroVotado]!=NULL)
-                        {
+                        {   
                             partidos[numeroVotado]->addVotosLegenda(qtdVotos);
                         }
                         else if(candidatos[numeroVotado]!=NULL)
                         {
-                            if(candidatos[numeroVotado]->getEhCandidatoLegenda())
-                            {
+                            if(candidatos[numeroVotado]->getEhCandidatoLegenda()==true)
+                            {   
                                 candidatos[numeroVotado]->getPartido()->addVotosLegenda(qtdVotos);
                             }
                             else
-                            {
+                            {   
                                 candidatos[numeroVotado]->addVotos(qtdVotos);
                             }
                         }
                         else
                         {   
-                            cout << "Candidato não encontrado" << endl;
-                            exit(1);
+                            break;
                         }
                     }
                     break;
                 case 1:
                     if(cargo==7)
                     {
-                        if(partidos[numeroVotado])
+                        if(partidos[numeroVotado] != NULL)
                         {
                             partidos[numeroVotado]->addVotosLegenda(qtdVotos);
                         }
-                        else if(candidatos[numeroVotado])
+                        else if(candidatos[numeroVotado] != NULL)
                         {
-                            if(candidatos[numeroVotado]->getEhCandidatoLegenda())
+                            if(candidatos[numeroVotado]->getEhCandidatoLegenda() == true)
                             {
                                 candidatos[numeroVotado]->getPartido()->addVotosLegenda(qtdVotos);
                             }
@@ -283,8 +282,7 @@ void Processamento::gerarVotos()
                         }
                         else
                         {
-                            cout << "Candidato não encontrado" << endl;
-                            exit(1);
+                            break;
                         }
                     }
                     break;
@@ -292,8 +290,7 @@ void Processamento::gerarVotos()
                     break;
             }
         }
-    }
-}
+    }}
 
 void Processamento::deletarCandidatos()
 {
@@ -316,7 +313,11 @@ map<int, Candidato*> Processamento::elegeCandidatos(map<int, Candidato*> candida
     map<int, Candidato*> candidatosEleitos = map<int, Candidato*>();
     for(const auto& candidato : candidatos)
     {
-        if(candidato.second->getSituacaoEleito() == 2)
+        if(candidato.second==NULL)
+        {
+            continue;
+        }
+        if(candidato.second->getSituacaoEleito() == 2 || candidato.second->getSituacaoEleito() == 3)
         {
             candidatosEleitos.insert(pair<int, Candidato*>(candidato.first, candidato.second));
         }
@@ -328,13 +329,14 @@ list<Candidato*> Processamento::ordenaCandidatosEmLista(map<int, Candidato*> can
 {
     list<Candidato*> candidatosOrdenados = list<Candidato*>();
     for(const auto& candidato : candidatos)
-    {
+    {   
+        if(candidato.second!=NULL)
         candidatosOrdenados.push_back(candidato.second);
     }
     candidatosOrdenados.sort([this](Candidato* c1, Candidato* c2) 
         {   
             if(c1->getVotos() != c2->getVotos())
-                return c2->getVotos() - c1->getVotos(); 
+                return c2->getVotos() < c1->getVotos(); 
             else
                 return ehMaisVelho(c2->getDataNascimento(), c1->getDataNascimento());
         });
@@ -349,21 +351,35 @@ list<Partido *> Processamento::ordenaPartidosEmLista(map<int, Partido *> partido
     {
         partidosOrdenados.push_back(partido.second);
     }
-
-
     partidosOrdenados.sort([](Partido* p1, Partido* p2) 
         {
-            cout << p1->getVotosTotais() << " " << p2->getVotosTotais() << endl;
-            cout << p1->getNumero() << " " << p2->getNumero() << endl;
-            if(p1->getVotosTotais() != p2->getVotosTotais())
+            if(p1!=NULL && p2!=NULL)
             {
-                return p2->getVotosTotais() - p1->getVotosTotais(); 
+                if(p1->getVotosTotais() != p2->getVotosTotais())
+                {
+                    return p2->getVotosTotais() < p1->getVotosTotais(); 
+                }
+                else if(p1->getNumero() != p2->getNumero())
+                    return p1->getNumero() < p2->getNumero();
+                else
+                    return false;
             }
-            else if(p1->getNumero() != p2->getNumero())
-                return p1->getNumero() - p2->getNumero();
+
             else
-                return 0;
+            {
+                return false;
+            }
         });
+
+        for(Partido* partido : partidosOrdenados)
+        {   
+            if(partido==NULL)
+            {
+                continue;
+            }
+            partido->ordenaCandidatos();
+        }
+    
 
     return partidosOrdenados;
 }

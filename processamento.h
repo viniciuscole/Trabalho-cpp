@@ -41,7 +41,8 @@ class Processamento
     vector<string> linhasArquivoCandidatos = vector<string>();
     vector<string> linhasArquivoVotos = vector<string>();
     vector<string> separaPalavraPorChar(string str, char delimitador);
-    int ehMaisVelho(string dataNascimento1, string dataNascimento2);
+    bool ehMaisVelho(string dataNascimento1, string dataNascimento2);
+    
     public:
         Processamento(vector <string> linhasArquivoCandidatos, vector<string> linhasArquivoVotos, int tipoDeEleicao);
         void processar(int tipoDeEleicao);

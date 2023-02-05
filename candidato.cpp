@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Candidato::Candidato(int tipoCandidato, int situacao, int numeroCandidato, string nome, int numeroFederacao, string dataNascimento, int situacaoEleito, int genero, int ehCandidatoLegenda){
+Candidato::Candidato(int tipoCandidato, int situacao, int numeroCandidato, string nome, int numeroFederacao, string dataNascimento, int situacaoEleito, int genero, bool ehCandidatoLegenda){
 
     this->tipoCandidato = tipoCandidato;
     this->situacao = situacao;
@@ -69,6 +69,33 @@ void Candidato::setPartido(Partido* partido)
 void Candidato::addVotos(int votos)
 {
     this->votos += votos;
+}
+
+int Candidato::calculaIdade(string dataEleicao)
+{
+    int diaEleicao = stoi(dataEleicao.substr(0, 2));
+    int mesEleicao = stoi(dataEleicao.substr(3, 2));
+    int anoEleicao = stoi(dataEleicao.substr(6, 4));
+
+    int diaNascimento = stoi(this->dataNascimento.substr(0, 2));
+    int mesNascimento = stoi(this->dataNascimento.substr(3, 2));
+    int anoNascimento = stoi(this->dataNascimento.substr(6, 4));
+
+    int idade = anoEleicao - anoNascimento;
+
+    if (mesEleicao < mesNascimento)
+    {
+        idade--;
+    }
+    else if (mesEleicao == mesNascimento)
+    {
+        if (diaEleicao < diaNascimento)
+        {
+            idade--;
+        }
+    }
+
+    return idade;
 }
 
 string Candidato::toString()

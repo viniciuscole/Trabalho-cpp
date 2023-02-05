@@ -5,6 +5,9 @@
 #include <time.h>
 #include <iostream>
 #include <locale>
+#include <vector>
+#include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -18,15 +21,22 @@ class Relatorios
     list<Candidato*> candidatosEleitosOrdenados;
     int tipoDeEleicao;
     string dataDaEleicao;
-    locale loc = locale("pt_BR.UTF-8");
+    locale locBR = locale("pt_BR.UTF-8");
     string transformaMaisculo(string str);
     bool checaSeCandidatoEstaNaLista(list<Candidato*> lista, Candidato* candidato);
+    int posicaoCandidatoNaLista(list<Candidato*> lista, Candidato* candidato);
+    Candidato* candidatoComMenosVotos(list<Candidato*> lista);
+    vector<string> separaPalavraPorChar(string str, char delimitador);
+    bool ehMaisVelho(string dataNascimento1, string dataNascimento2);
     public:
         Relatorios(string dataDaEleicao, int tipoDeEleicao);
         void setCandidatos(list<Candidato*> candidatos);
         void setPartidos(list<Partido*> partidos);
         void setCandidatosEleitos(list<Candidato*> candidatosEleitos);
         void setLocale(locale loc);
+        void imprimeCandidatos();
+        void imprimePartidos();
+        void imprimeCandidatosEleitos();
         void gerarRelatorios();
         void gerarRelatorio1();
         void gerarRelatorio2();

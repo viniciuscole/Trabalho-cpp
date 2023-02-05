@@ -20,12 +20,12 @@ class Candidato
     int genero;
     int votos=0;
     Partido* partido;
-    int ehCandidatoLegenda;
+    bool ehCandidatoLegenda;
     
     public: 
     
     Candidato(int tipoCandidato, int situacao, int numeroCandidato, string nome, int numeroFederacao,
-              string dataNascimento, int situacaoEleito, int genero, int ehCandidatoLegenda);
+              string dataNascimento, int situacaoEleito, int genero, bool ehCandidatoLegenda);
     int getTipoCandidato();
     int getSituacao();
     int getNumeroCandidato();
@@ -39,6 +39,7 @@ class Candidato
     Partido* getPartido();
     void setPartido(Partido* partido);
     void addVotos(int votos);
+    int calculaIdade(string dataEleicao);
     string toString();
 
 };
