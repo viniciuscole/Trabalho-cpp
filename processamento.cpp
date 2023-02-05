@@ -108,24 +108,34 @@ void Processamento::processar(int tipoDeEleicao)
 {
     gerarCandidatos();
     gerarVotos();
+    cout << "Votos gerados" << endl;
 }
 
 void Processamento::gerarRelatorios(string dataEleicao, int tipoDeEleicao)
 {
+    cout << "entrou aqui" << endl;
     Relatorios relatorio = Relatorios(dataEleicao, tipoDeEleicao);
     relatorio.setCandidatos(ordenaCandidatosEmLista(candidatos));
     relatorio.setCandidatosEleitos(ordenaCandidatosEmLista(elegeCandidatos(candidatos)));
     relatorio.setPartidos(ordenaPartidosEmLista(partidos));
+    cout << "entrou aqui 4" << endl;
     relatorio.gerarRelatorios();
 }
 
 void Processamento::gerarCandidatos()
 {
     vector<string> informacoes;
+
+
     for(string linhaIso : linhasArquivoCandidatos)
-    {
+    {   
+        if(linhaIso == linhasArquivoCandidatos[0])
+        {
+            continue;
+        }
         string linha = iso_8859_1_to_utf8(linhaIso);
         informacoes = separaPalavraPorChar(linha, ';');
+        
         int tipoCandidato = stoi(informacoes[tipoCandidatoIndice].substr(1, informacoes[tipoCandidatoIndice].size() - 2));  //retira aspas
         int situacao = stoi(informacoes[situacaoIndice].substr(1, informacoes[situacaoIndice].size() - 2));
         int numeroCandidato = stoi(informacoes[numeroCandidatoIndice].substr(1, informacoes[numeroCandidatoIndice].size() - 2));
@@ -137,6 +147,7 @@ void Processamento::gerarCandidatos()
         int situacaoEleito = stoi(informacoes[situacaoEleitoIndice].substr(1, informacoes[situacaoEleitoIndice].size() - 2));
         int genero = stoi(informacoes[generoIndice].substr(1, informacoes[generoIndice].size() - 2));
         string tipoVoto = informacoes[tipoVotoIndice].substr(1, informacoes[tipoVotoIndice].size() - 2);
+        
 
 
         bool partidoJaExiste = false;
@@ -207,6 +218,12 @@ void Processamento::gerarVotos()
     vector<string> informacoes;
     for(string linhaIso : linhasArquivoVotos)
     {
+        //pular a primeira linha
+        if(linhaIso == linhasArquivoVotos[0])
+        {
+            continue;
+        }
+
         string linha = iso_8859_1_to_utf8(linhaIso);
         informacoes = separaPalavraPorChar(linha, ';');
         
@@ -214,7 +231,7 @@ void Processamento::gerarVotos()
         int numeroVotado = stoi(informacoes[numeroVotadoIndice].substr(1, informacoes[numeroVotadoIndice].size() - 2));
         int qtdVotos = stoi(informacoes[qtdVotosIndice].substr(1, informacoes[qtdVotosIndice].size() - 2));
 
-        if((numeroVotado !=95 || numeroVotado !=96 || numeroVotado !=97 || numeroVotado !=98)) //ignora votos nulos e em branco
+        if((numeroVotado != 95 && numeroVotado !=96 && numeroVotado !=97 && numeroVotado !=98)) //ignora votos nulos e em branco
         {
             switch(tipoDeEleicao)
             {
@@ -224,11 +241,11 @@ void Processamento::gerarVotos()
                 case 0:
                     if(cargo==6)
                     {   
-                        if(partidos[numeroVotado])
+                        if(partidos[numeroVotado]!=NULL)
                         {
                             partidos[numeroVotado]->addVotosLegenda(qtdVotos);
                         }
-                        else if(candidatos[numeroVotado])
+                        else if(candidatos[numeroVotado]!=NULL)
                         {
                             if(candidatos[numeroVotado]->getEhCandidatoLegenda())
                             {
@@ -240,7 +257,7 @@ void Processamento::gerarVotos()
                             }
                         }
                         else
-                        {
+                        {   
                             cout << "Candidato não encontrado" << endl;
                             exit(1);
                         }
@@ -304,7 +321,7 @@ map<int, Candidato*> Processamento::elegeCandidatos(map<int, Candidato*> candida
             candidatosEleitos.insert(pair<int, Candidato*>(candidato.first, candidato.second));
         }
     }
-
+    return candidatosEleitos;
 }
 
 list<Candidato*> Processamento::ordenaCandidatosEmLista(map<int, Candidato*> candidatos)
@@ -333,12 +350,19 @@ list<Partido *> Processamento::ordenaPartidosEmLista(map<int, Partido *> partido
         partidosOrdenados.push_back(partido.second);
     }
 
+
     partidosOrdenados.sort([](Partido* p1, Partido* p2) 
-        {   
+        {
+            cout << p1->getVotosTotais() << " " << p2->getVotosTotais() << endl;
+            cout << p1->getNumero() << " " << p2->getNumero() << endl;
             if(p1->getVotosTotais() != p2->getVotosTotais())
+            {
                 return p2->getVotosTotais() - p1->getVotosTotais(); 
-            else
+            }
+            else if(p1->getNumero() != p2->getNumero())
                 return p1->getNumero() - p2->getNumero();
+            else
+                return 0;
         });
 
     return partidosOrdenados;

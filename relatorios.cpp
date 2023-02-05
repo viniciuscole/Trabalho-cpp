@@ -136,7 +136,7 @@ void Relatorios::gerarRelatorio2()
 
 void Relatorios::gerarRelatorio3()
 {
-    int i = 1;
+    unsigned long int i = 1;
     cout << "Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):" << endl;
     for(Candidato* candidato : candidatosOrdenados)
     {
@@ -166,7 +166,7 @@ void Relatorios::gerarRelatorio3()
 
 void Relatorios::gerarRelatorio4()
 {
-    int i = 1;
+    unsigned long int i = 1;
     
     cout << "Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:" << endl;
     cout << "(com sua posição no ranking de mais votados)" << endl;
@@ -176,6 +176,7 @@ void Relatorios::gerarRelatorio4()
         string votoStr = candidato->getVotos() == 1 ? " voto" : " votos";
         
         if(checaSeCandidatoEstaNaLista(candidatosEleitosOrdenados, candidato) == false)
+        {
             if(candidato->getNumeroFederacao()==-1)
             {
                 
@@ -189,6 +190,7 @@ void Relatorios::gerarRelatorio4()
                     << " (" << candidato->getPartido()->getSigla() << ", " 
                     << candidato->getVotos() << votoStr << ")" << endl;
             }
+        }
 
         i++;
 
@@ -200,7 +202,7 @@ void Relatorios::gerarRelatorio4()
 
 void Relatorios::gerarRelatorio5()
 {
-    int i = 1;
+    unsigned long int i = 1;
     
     cout << "Eleitos, que se beneficiaram do sistema proporcional:" << endl;
     cout << "(com sua posição no ranking de mais votados)" << endl;

@@ -25,7 +25,7 @@ vector<string> Leitor::lerArquivoCandidatos()
             linhas.push_back(linha);
         }
         entrada.close();
-    }catch(ifstream::failure e){
+    }catch(std::ios_base::failure const&){
         cerr << "Erro ao abrir o arquivo" << endl;
     }
     
@@ -46,7 +46,7 @@ vector<string> Leitor::lerArquivoVotos()
             linhas.push_back(linha);
         }
         entrada.close();
-    }catch(ifstream::failure e){
+    }catch(std::ios_base::failure const&){
         cerr << "Erro ao abrir o arquivo" << endl;
     }
     
