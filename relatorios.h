@@ -16,23 +16,23 @@ using namespace std;
 
 class Relatorios
 {
-    list<Candidato*> candidatosOrdenados;
-    list<Partido*> partidosOrdenados;
-    list<Candidato*> candidatosEleitosOrdenados;
+    list<Candidato*>* candidatosOrdenados;
+    list<Partido*>* partidosOrdenados;
+    list<Candidato*>* candidatosEleitosOrdenados;
     int tipoDeEleicao;
     string dataDaEleicao;
     locale locBR = locale("pt_BR.UTF-8");
     string transformaMaisculo(string str);
-    bool checaSeCandidatoEstaNaLista(list<Candidato*> lista, Candidato* candidato);
-    int posicaoCandidatoNaLista(list<Candidato*> lista, Candidato* candidato);
-    Candidato* candidatoComMenosVotos(list<Candidato*> lista);
+    bool checaSeCandidatoEstaNaLista(list<Candidato*>* lista, Candidato* candidato);
+    int posicaoCandidatoNaLista(list<Candidato*>* lista, Candidato* candidato);
+    Candidato* candidatoComMenosVotos(list<Candidato*>* lista);
     vector<string> separaPalavraPorChar(string str, char delimitador);
     bool ehMaisVelho(string dataNascimento1, string dataNascimento2);
     public:
         Relatorios(string dataDaEleicao, int tipoDeEleicao);
-        void setCandidatos(list<Candidato*> candidatos);
-        void setPartidos(list<Partido*> partidos);
-        void setCandidatosEleitos(list<Candidato*> candidatosEleitos);
+        void setCandidatos(list<Candidato*>* candidatos);
+        void setPartidos(list<Partido*>* partidos);
+        void setCandidatosEleitos(list<Candidato*>* candidatosEleitos);
         void setLocale(locale loc);
         void imprimeCandidatos();
         void imprimePartidos();
@@ -49,6 +49,7 @@ class Relatorios
         void gerarRelatorio9();
         void gerarRelatorio10();
         void gerarRelatorio11();
+        ~Relatorios();
 };
 
 

@@ -72,7 +72,7 @@ Partido::Partido(string sigla, int numero)
     this->numero = numero;
 }
 
-list<Candidato*> Partido::getCandidatos()
+list<Candidato*>* Partido::getCandidatos()
 {
     return this->candidatos;
 }
@@ -96,7 +96,7 @@ int Partido::getVotosNominais()
 {
    int votos=0;
 
-   for (Candidato* candidato : candidatos)
+   for (Candidato* candidato : *candidatos)
    {
        votos += candidato->getVotos();
    }
@@ -111,7 +111,7 @@ int Partido::getVotosTotais()
 
 void Partido::ordenaCandidatos()
 {
-    candidatos.sort([this](Candidato* c1, Candidato* c2) 
+    candidatos->sort([this](Candidato* c1, Candidato* c2) 
         {   
             if(c1->getVotos() != c2->getVotos())
                 return c2->getVotos() < c1->getVotos(); 
@@ -127,5 +127,10 @@ void Partido::addVotosLegenda(int votosLegenda)
 
 void Partido::addCandidato(Candidato* candidato)
 {
-    candidatos.push_back(candidato);
+    candidatos->push_back(candidato);
+}
+
+Partido::~Partido()
+{
+    delete candidatos;
 }

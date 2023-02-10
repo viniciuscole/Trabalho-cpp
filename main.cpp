@@ -37,14 +37,12 @@ int main(int argc, char const *argv[]){
     leitor.setCaminho(arquivoVotos);
     vector<string> linhasVotos = leitor.lerArquivoVotos();
 
-    Processamento processamento = Processamento(linhasCandidatos, linhasVotos, tipo);
-    processamento.processar(tipo);
-    processamento.gerarRelatorios(data, tipo);
-    processamento.deletarCandidatos();
-    processamento.deletarPartidos();
-
+    Processamento* processamento = new Processamento(linhasCandidatos, linhasVotos, tipo);
+    processamento->processar(tipo);
+    processamento->gerarRelatorios(data, tipo);
+    delete processamento;
     
-    
+    cin.imbue(locale::classic());
 
     return 0;
 }

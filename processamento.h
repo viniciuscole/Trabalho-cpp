@@ -35,14 +35,17 @@ class Processamento
 {
     bool compare_pt_BR(const string &s1, const string &s2);
     string iso_8859_1_to_utf8(string &str);
-    map<int, Candidato*> candidatos = map<int, Candidato*>();
-    map<int, Partido*> partidos = map<int, Partido*>();
+    map<int, Candidato*>* candidatos = new map<int, Candidato*>();
+    map<int, Partido*>* partidos = new map<int, Partido*>();
+    map<int, Candidato*>* candidatosEleitos = new map<int, Candidato*>();
     int tipoDeEleicao = -1;
     vector<string> linhasArquivoCandidatos = vector<string>();
     vector<string> linhasArquivoVotos = vector<string>();
     vector<string> separaPalavraPorChar(string str, char delimitador);
     bool ehMaisVelho(string dataNascimento1, string dataNascimento2);
-    
+    void deletarCandidatos();
+    void deletarPartidos();
+
     public:
         Processamento(vector <string> linhasArquivoCandidatos, vector<string> linhasArquivoVotos, int tipoDeEleicao);
         void processar(int tipoDeEleicao);
@@ -50,12 +53,10 @@ class Processamento
         void gerarCandidatos();
         void gerarPartido(int numeroPartido, string siglaPartido);
         void gerarVotos();
-        void deletarCandidatos();
-        void deletarPartidos();
-        map<int, Candidato*> elegeCandidatos(map<int, Candidato*> candidatos);
-        list<Candidato*> ordenaCandidatosEmLista(map<int, Candidato*> candidatos);
-        list<Partido*>  ordenaPartidosEmLista(map<int, Partido*> partidos);
-
+        map<int, Candidato*>* elegeCandidatos(map<int, Candidato*>* candidatos);
+        list<Candidato*>* ordenaCandidatosEmLista(map<int, Candidato*>* candidatos);
+        list<Partido*>*  ordenaPartidosEmLista(map<int, Partido*>* partidos);
+        ~Processamento();
 };
 
 #endif // PROCESSAMENTO_H

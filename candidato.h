@@ -41,6 +41,7 @@ class Candidato
     void addVotos(int votos);
     int calculaIdade(string dataEleicao);
     string toString();
+    ~Candidato();
 
 };
 

@@ -29,6 +29,7 @@ vector<string> Leitor::lerArquivoCandidatos()
         cerr << "Erro ao abrir o arquivo" << endl;
     }
     
+    
     return linhas;
 }
 
@@ -51,4 +52,8 @@ vector<string> Leitor::lerArquivoVotos()
     }
     
     return linhas;
+}
+
+Leitor::~Leitor()
+{
 }

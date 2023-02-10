@@ -19,7 +19,7 @@ class Leitor
         void setCaminho(string caminho);
         vector<string> lerArquivoCandidatos();
         vector<string> lerArquivoVotos();
-    
+        ~Leitor();
 };
 
 #endif

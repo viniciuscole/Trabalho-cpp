@@ -106,3 +106,7 @@ string Candidato::toString()
                 + std::to_string(numeroFederacao) + ", dataNascimento=" + dataNascimento + ", situacaoEleito=" + std::to_string(situacaoEleito)
                 + ", genero=" + std::to_string(genero) + ", votos=" + std::to_string(votos) + ", é de legenda:" + std::to_string(ehCandidatoLegenda) + "]";
 }
+
+Candidato::~Candidato()
+{
+}

@@ -93,6 +93,24 @@
         return strOut;
     }
 
+    void Processamento::deletarCandidatos()
+    {   
+        for(const auto& candidato : *candidatos)
+        {   
+            delete candidato.second;
+        }
+        delete candidatos;
+    }
+
+    void Processamento::deletarPartidos()
+    {
+        for(const auto& partido : *partidos)
+        {
+            delete partido.second;
+        }
+        delete partidos;
+    }
+
 //
 
 
@@ -102,7 +120,6 @@ Processamento::Processamento(vector<string> linhasArquivoCandidatos, vector<stri
     this->linhasArquivoVotos = linhasArquivoVotos;
     this->tipoDeEleicao = tipoDeEleicao;
 }
-
 
 
 void Processamento::processar(int tipoDeEleicao)
@@ -118,6 +135,8 @@ void Processamento::gerarRelatorios(string dataEleicao, int tipoDeEleicao)
     relatorio.setCandidatosEleitos(ordenaCandidatosEmLista(elegeCandidatos(candidatos)));
     relatorio.setPartidos(ordenaPartidosEmLista(partidos));
     relatorio.gerarRelatorios();
+    deletarCandidatos();
+    deletarPartidos();
 }
 
 void Processamento::gerarCandidatos()
@@ -149,7 +168,7 @@ void Processamento::gerarCandidatos()
 
 
         bool partidoJaExiste = false;
-        for(const auto& partido : partidos)
+        for(const auto& partido : *partidos)
         {
             if(partido.second->getNumero() == numeroPartido)
             {
@@ -166,9 +185,12 @@ void Processamento::gerarCandidatos()
         {
             Candidato* candidato = new Candidato(tipoCandidato, situacao, numeroCandidato, nome, numeroFederacao,
                         dataNascimento, situacaoEleito, genero, true);
-            candidatos.insert(pair<int, Candidato*>(numeroCandidato, candidato));
-            partidos[numeroPartido]->addCandidato(candidato);
-            candidato->setPartido(partidos[numeroPartido]);
+            candidatos->insert(pair<int, Candidato*>(numeroCandidato, candidato));
+            
+            (*partidos)[numeroPartido]->addCandidato(candidato);
+
+
+            candidato->setPartido((*partidos)[numeroPartido]);
             i++;
         }
         else if ((situacao==2 || situacao==16))
@@ -183,9 +205,9 @@ void Processamento::gerarCandidatos()
                     {
                         Candidato* candidato = new Candidato(tipoCandidato, situacao, numeroCandidato, nome, numeroFederacao,
                         dataNascimento, situacaoEleito, genero, false);
-                        candidatos.insert(pair<int, Candidato*>(numeroCandidato, candidato));
-                        partidos[numeroPartido]->addCandidato(candidato);
-                        candidato->setPartido(partidos[numeroPartido]);
+                        candidatos->insert(pair<int, Candidato*>(numeroCandidato, candidato));
+                        (*partidos)[numeroPartido]->addCandidato(candidato);
+                        candidato->setPartido((*partidos)[numeroPartido]);
                         i++;
                     }
                     break;
@@ -194,9 +216,9 @@ void Processamento::gerarCandidatos()
                     {
                         Candidato* candidato = new Candidato(tipoCandidato, situacao, numeroCandidato, nome, numeroFederacao,
                         dataNascimento, situacaoEleito, genero, false);
-                        candidatos.insert(pair<int, Candidato*>(numeroCandidato, candidato));
-                        partidos[numeroPartido]->addCandidato(candidato);
-                        candidato->setPartido(partidos[numeroPartido]);
+                        candidatos->insert(pair<int, Candidato*>(numeroCandidato, candidato));
+                        (*partidos)[numeroPartido]->addCandidato(candidato);
+                        candidato->setPartido((*partidos)[numeroPartido]);
                     }
                     break;
                 default:
@@ -209,7 +231,7 @@ void Processamento::gerarCandidatos()
 void Processamento::gerarPartido(int numeroPartido, string siglaPartido)
 {
     Partido* partido = new Partido(siglaPartido, numeroPartido);
-    partidos.insert(pair<int, Partido*>(numeroPartido, partido));
+    partidos->insert(pair<int, Partido*>(numeroPartido, partido));
 }
 
 void Processamento::gerarVotos()
@@ -241,19 +263,19 @@ void Processamento::gerarVotos()
                     if(cargo==6)
                     {  
 
-                        if(partidos[numeroVotado]!=NULL)
+                        if((*partidos)[numeroVotado]!=NULL)
                         {   
-                            partidos[numeroVotado]->addVotosLegenda(qtdVotos);
+                            (*partidos)[numeroVotado]->addVotosLegenda(qtdVotos);
                         }
-                        else if(candidatos[numeroVotado]!=NULL)
+                        else if((*candidatos)[numeroVotado]!=NULL)
                         {
-                            if(candidatos[numeroVotado]->getEhCandidatoLegenda()==true)
+                            if((*candidatos)[numeroVotado]->getEhCandidatoLegenda()==true)
                             {   
-                                candidatos[numeroVotado]->getPartido()->addVotosLegenda(qtdVotos);
+                                (*candidatos)[numeroVotado]->getPartido()->addVotosLegenda(qtdVotos);
                             }
                             else
                             {   
-                                candidatos[numeroVotado]->addVotos(qtdVotos);
+                                (*candidatos)[numeroVotado]->addVotos(qtdVotos);
                             }
                         }
                         else
@@ -265,19 +287,19 @@ void Processamento::gerarVotos()
                 case 1:
                     if(cargo==7)
                     {
-                        if(partidos[numeroVotado] != NULL)
+                        if((*partidos)[numeroVotado] != NULL)
                         {
-                            partidos[numeroVotado]->addVotosLegenda(qtdVotos);
+                            (*partidos)[numeroVotado]->addVotosLegenda(qtdVotos);
                         }
-                        else if(candidatos[numeroVotado] != NULL)
+                        else if((*candidatos)[numeroVotado] != NULL)
                         {
-                            if(candidatos[numeroVotado]->getEhCandidatoLegenda() == true)
+                            if((*candidatos)[numeroVotado]->getEhCandidatoLegenda() == true)
                             {
-                                candidatos[numeroVotado]->getPartido()->addVotosLegenda(qtdVotos);
+                                (*candidatos)[numeroVotado]->getPartido()->addVotosLegenda(qtdVotos);
                             }
                             else
                             {
-                                candidatos[numeroVotado]->addVotos(qtdVotos);
+                                (*candidatos)[numeroVotado]->addVotos(qtdVotos);
                             }
                         }
                         else
@@ -292,26 +314,9 @@ void Processamento::gerarVotos()
         }
     }}
 
-void Processamento::deletarCandidatos()
+map<int, Candidato*>* Processamento::elegeCandidatos(map<int, Candidato*>* candidatos)
 {
-    for(const auto& candidato : candidatos)
-    {
-        delete candidato.second;
-    }
-}
-
-void Processamento::deletarPartidos()
-{
-    for(const auto& partido : partidos)
-    {
-        delete partido.second;
-    }
-}
-
-map<int, Candidato*> Processamento::elegeCandidatos(map<int, Candidato*> candidatos)
-{
-    map<int, Candidato*> candidatosEleitos = map<int, Candidato*>();
-    for(const auto& candidato : candidatos)
+    for(const auto& candidato : *candidatos)
     {
         if(candidato.second==NULL)
         {
@@ -319,21 +324,21 @@ map<int, Candidato*> Processamento::elegeCandidatos(map<int, Candidato*> candida
         }
         if(candidato.second->getSituacaoEleito() == 2 || candidato.second->getSituacaoEleito() == 3)
         {
-            candidatosEleitos.insert(pair<int, Candidato*>(candidato.first, candidato.second));
+            candidatosEleitos->insert(pair<int, Candidato*>(candidato.first, candidato.second));
         }
     }
     return candidatosEleitos;
 }
 
-list<Candidato*> Processamento::ordenaCandidatosEmLista(map<int, Candidato*> candidatos)
+list<Candidato*>* Processamento::ordenaCandidatosEmLista(map<int, Candidato*>* candidatos)
 {
-    list<Candidato*> candidatosOrdenados = list<Candidato*>();
-    for(const auto& candidato : candidatos)
+    list<Candidato*> *candidatosOrdenados = new list<Candidato*>();
+    for(const auto& candidato : *candidatos)
     {   
         if(candidato.second!=NULL)
-        candidatosOrdenados.push_back(candidato.second);
+        candidatosOrdenados->push_back(candidato.second);
     }
-    candidatosOrdenados.sort([this](Candidato* c1, Candidato* c2) 
+    candidatosOrdenados->sort([this](Candidato* c1, Candidato* c2) 
         {   
             if(c1->getVotos() != c2->getVotos())
                 return c2->getVotos() < c1->getVotos(); 
@@ -344,14 +349,14 @@ list<Candidato*> Processamento::ordenaCandidatosEmLista(map<int, Candidato*> can
     return candidatosOrdenados;
 }
 
-list<Partido *> Processamento::ordenaPartidosEmLista(map<int, Partido *> partidos)
+list<Partido *>* Processamento::ordenaPartidosEmLista(map<int, Partido *>* partidos)
 {
-    list <Partido *> partidosOrdenados = list<Partido *>();
-    for(const auto& partido : partidos)
+    list <Partido *>* partidosOrdenados = new list<Partido *>();
+    for(const auto& partido : *partidos)
     {
-        partidosOrdenados.push_back(partido.second);
+        partidosOrdenados->push_back(partido.second);
     }
-    partidosOrdenados.sort([](Partido* p1, Partido* p2) 
+    partidosOrdenados->sort([](Partido* p1, Partido* p2) 
         {
             if(p1!=NULL && p2!=NULL)
             {
@@ -371,7 +376,7 @@ list<Partido *> Processamento::ordenaPartidosEmLista(map<int, Partido *> partido
             }
         });
 
-        for(Partido* partido : partidosOrdenados)
+        for(Partido* partido : *partidosOrdenados)
         {   
             if(partido==NULL)
             {
@@ -382,4 +387,8 @@ list<Partido *> Processamento::ordenaPartidosEmLista(map<int, Partido *> partido
     
 
     return partidosOrdenados;
+}
+
+Processamento::~Processamento()
+{
 }

@@ -21,9 +21,9 @@ string Relatorios::transformaMaisculo(string str)
     }
     return strOut;
 }
-bool Relatorios::checaSeCandidatoEstaNaLista(list<Candidato *> lista, Candidato *candidato)
+bool Relatorios::checaSeCandidatoEstaNaLista(list<Candidato *>* lista, Candidato *candidato)
 {
-    for (Candidato* candidatoLista : lista)
+    for (Candidato* candidatoLista : *lista)
     {
         if (candidatoLista->getNumeroCandidato() == candidato->getNumeroCandidato())
         {
@@ -32,10 +32,10 @@ bool Relatorios::checaSeCandidatoEstaNaLista(list<Candidato *> lista, Candidato 
     }
     return false;
 }
-int Relatorios::posicaoCandidatoNaLista(list<Candidato *> lista, Candidato *candidato)
+int Relatorios::posicaoCandidatoNaLista(list<Candidato *>* lista, Candidato *candidato)
     {
         int posicao = 0;
-        for (Candidato* candidatoLista : lista)
+        for (Candidato* candidatoLista : *lista)
         {
             if (candidatoLista->getNumeroCandidato() == candidato->getNumeroCandidato())
             {
@@ -45,11 +45,11 @@ int Relatorios::posicaoCandidatoNaLista(list<Candidato *> lista, Candidato *cand
         }
         return -1;
 }
-Candidato *Relatorios::candidatoComMenosVotos(list<Candidato *> lista)
+Candidato *Relatorios::candidatoComMenosVotos(list<Candidato *>* lista)
 {   
     int i=0;
     Candidato* candidatoComMenosVotos;
-    for (Candidato* candidato : lista)
+    for (Candidato* candidato : *lista)
     {
         if(i==0)
         {
@@ -129,17 +129,17 @@ bool Relatorios::ehMaisVelho(string dataNascimento1, string dataNascimento2)
 
 
 //PUBLIC
-void Relatorios::setCandidatos(list<Candidato *> candidatos)
+void Relatorios::setCandidatos(list<Candidato *>* candidatos)
 {
     this->candidatosOrdenados = candidatos;
 }
 
-void Relatorios::setPartidos(list<Partido *> partidos)
+void Relatorios::setPartidos(list<Partido *>* partidos)
 {
     this->partidosOrdenados = partidos;
 }
 
-void Relatorios::setCandidatosEleitos(list<Candidato *> candidatosEleitos)
+void Relatorios::setCandidatosEleitos(list<Candidato *>* candidatosEleitos)
 {
     this->candidatosEleitosOrdenados = candidatosEleitos;
 }
@@ -147,12 +147,12 @@ void Relatorios::setCandidatosEleitos(list<Candidato *> candidatosEleitos)
 
 void Relatorios::setLocale(locale loc)
 {
-    this->locBR = locBR;
+    this->locBR = loc;
 }
 
 void Relatorios::imprimeCandidatos()
 {
-    for(Candidato* candidato : candidatosOrdenados)
+    for(Candidato* candidato : *candidatosOrdenados)
     {
         cout << candidato->toString() << endl;
     }
@@ -160,7 +160,7 @@ void Relatorios::imprimeCandidatos()
 
 void Relatorios::imprimePartidos()
 {
-    for(Partido* partido : partidosOrdenados)
+    for(Partido* partido : *partidosOrdenados)
     {
         cout << partido->getSigla() << "-" << partido->getNumero()  << endl;
     }
@@ -168,7 +168,7 @@ void Relatorios::imprimePartidos()
 
 void Relatorios::imprimeCandidatosEleitos()
 {
-    for(Candidato* candidato : candidatosEleitosOrdenados)
+    for(Candidato* candidato : *candidatosEleitosOrdenados)
     {
         cout << candidato->toString() << endl;
     }
@@ -198,11 +198,15 @@ void Relatorios::gerarRelatorios()
     gerarRelatorio10();
     cout << endl;
     gerarRelatorio11();
+    delete candidatosOrdenados;
+    delete partidosOrdenados;
+    delete candidatosEleitosOrdenados;
+    cout.imbue(locale::classic());
 }
 
 void Relatorios::gerarRelatorio1()
 {
-    cout << "Número de vagas: " << candidatosEleitosOrdenados.size() << endl;
+    cout << "Número de vagas: " << candidatosEleitosOrdenados->size() << endl;
 }
 
 void Relatorios::gerarRelatorio2()
@@ -211,7 +215,7 @@ void Relatorios::gerarRelatorio2()
     if(tipoDeEleicao == 1)
     {
         cout << "Deputados estaduais eleitos:" << endl;
-        for(Candidato* candidatoEleito : candidatosEleitosOrdenados)
+        for(Candidato* candidatoEleito : *candidatosEleitosOrdenados)
         {
             
             string votoStr = candidatoEleito->getVotos() == 1 ? " voto" : " votos";
@@ -236,7 +240,7 @@ void Relatorios::gerarRelatorio2()
     else if(tipoDeEleicao == 0)
     {
         cout << "Deputados federais eleitos:" << endl;
-        for(Candidato* candidatoEleito : candidatosEleitosOrdenados)
+        for(Candidato* candidatoEleito : *candidatosEleitosOrdenados)
         {
             
             string votoStr = candidatoEleito->getVotos() == 1 ? " voto" : " votos";
@@ -266,7 +270,7 @@ void Relatorios::gerarRelatorio3()
 {
     unsigned long int i = 1;
     cout << "Candidatos mais votados (em ordem decrescente de votação e respeitando número de vagas):" << endl;
-    for(Candidato* candidato : candidatosOrdenados)
+    for(Candidato* candidato : *candidatosOrdenados)
     {
         string votoStr = candidato->getVotos() == 1 ? " voto" : " votos";
         
@@ -286,7 +290,7 @@ void Relatorios::gerarRelatorio3()
 
         i++;
 
-        if(i > candidatosEleitosOrdenados.size())
+        if(i > candidatosEleitosOrdenados->size())
             break;
         
     }
@@ -299,7 +303,7 @@ void Relatorios::gerarRelatorio4()
     cout << "Teriam sido eleitos se a votação fosse majoritária, e não foram eleitos:" << endl;
     cout << "(com sua posição no ranking de mais votados)" << endl;
 
-    for(Candidato* candidato : candidatosOrdenados)
+    for(Candidato* candidato : *candidatosOrdenados)
     {
         string votoStr = candidato->getVotos() == 1 ? " voto" : " votos";
         
@@ -322,7 +326,7 @@ void Relatorios::gerarRelatorio4()
 
         i++;
 
-        if(i > candidatosEleitosOrdenados.size())
+        if(i > candidatosEleitosOrdenados->size())
             break;
         
     }
@@ -336,17 +340,17 @@ void Relatorios::gerarRelatorio5()
     cout << "(com sua posição no ranking de mais votados)" << endl;
 
 
-    list<Candidato*> candidatosMaisVotados;
+    list<Candidato*>* candidatosMaisVotados = new list<Candidato*>();
 
-    for(Candidato* candidato : candidatosOrdenados)
+    for(Candidato* candidato : *candidatosOrdenados)
     {
-        candidatosMaisVotados.push_back(candidato);
+        candidatosMaisVotados->push_back(candidato);
         i++;
-        if(i > candidatosEleitosOrdenados.size())
+        if(i > candidatosEleitosOrdenados->size())
             break;
     }
 
-    for(Candidato* candidatoEleito : candidatosEleitosOrdenados)
+    for(Candidato* candidatoEleito : *candidatosEleitosOrdenados)
     {
 
         string votoStr = candidatoEleito->getVotos() == 1 ? " voto" : " votos";
@@ -369,6 +373,7 @@ void Relatorios::gerarRelatorio5()
         }
         i++;
     }
+    delete candidatosMaisVotados;
 }
 
 void Relatorios::gerarRelatorio6()
@@ -377,7 +382,7 @@ void Relatorios::gerarRelatorio6()
 
     cout << "Votação dos partidos e número de candidatos eleitos:" << endl;
 
-    for(Partido* partido : partidosOrdenados)
+    for(Partido* partido : *partidosOrdenados)
     {   
         if(partido==NULL)
             continue;
@@ -385,7 +390,7 @@ void Relatorios::gerarRelatorio6()
         string nominalStr = partido->getVotosNominais() <= 1 ? " nominal" : " nominais";
     
         j=0;
-        for(Candidato* candidato : partido->getCandidatos())
+        for(Candidato* candidato : *(partido->getCandidatos()))
         {
             if(checaSeCandidatoEstaNaLista(candidatosEleitosOrdenados, candidato))
                 j++;
@@ -417,15 +422,15 @@ void Relatorios::gerarRelatorio8()
     cout << "Primeiro e último colocados de cada partido:" << endl;
 
 
-    list<Candidato*> candidatosMaisVotados = list<Candidato*>();
-    for(Partido* partido : partidosOrdenados){
+    list<Candidato*>* candidatosMaisVotados = new list<Candidato*>();
+    for(Partido* partido : *partidosOrdenados){
         if(partido==NULL)
             continue;
-        if(partido->getCandidatos().size()>0 && partido->getCandidatos().front()->getVotos()>0)
-            candidatosMaisVotados.push_back(partido->getCandidatos().front());
+        if((*partido->getCandidatos()).size()>0 && (*partido->getCandidatos()).front()->getVotos()>0)
+            candidatosMaisVotados->push_back((*partido->getCandidatos()).front());
     }
 
-    candidatosMaisVotados.sort([this](Candidato* c1, Candidato* c2) { 
+    candidatosMaisVotados->sort([this](Candidato* c1, Candidato* c2) { 
         if(c1==NULL || c2==NULL)
             return false;
         if(c1->getVotos() != c2->getVotos())
@@ -435,7 +440,7 @@ void Relatorios::gerarRelatorio8()
     });
 
     int i=1;
-    for(Candidato* candidato : candidatosMaisVotados)
+    for(Candidato* candidato : *candidatosMaisVotados)
     {
         Candidato* candidatoMenosVotado = candidatoComMenosVotos(candidato->getPartido()->getCandidatos()); // pega o candidato com menos votos do partido, excluindo os "candidatos de legenda"
          
@@ -458,13 +463,14 @@ void Relatorios::gerarRelatorio8()
     
         i++;
     }
+    delete candidatosMaisVotados;
 }
 
 void Relatorios::gerarRelatorio9()
 {
     int menorQue30 = 0, entre30e40 = 0, entre40e50 = 0, entre50e60 = 0, maiorQue60 = 0;
 
-    for(Candidato* candidato : candidatosEleitosOrdenados){
+    for(Candidato* candidato : *candidatosEleitosOrdenados){
         if(candidato==NULL)
             continue;
         int idade = candidato->calculaIdade(dataDaEleicao);
@@ -480,11 +486,11 @@ void Relatorios::gerarRelatorio9()
             maiorQue60++;
     }
 
-    float percentualMenorQue30 = (float)menorQue30/(float)candidatosEleitosOrdenados.size()*100;
-    float percentualEntre30e40 = (float)entre30e40/(float)candidatosEleitosOrdenados.size()*100;
-    float percentualEntre40e50 = (float)entre40e50/(float)candidatosEleitosOrdenados.size()*100;
-    float percentualEntre50e60 = (float)entre50e60/(float)candidatosEleitosOrdenados.size()*100;
-    float percentualMaiorQue60 = (float)maiorQue60/(float)candidatosEleitosOrdenados.size()*100;
+    float percentualMenorQue30 = (float)menorQue30/(float)candidatosEleitosOrdenados->size()*100;
+    float percentualEntre30e40 = (float)entre30e40/(float)candidatosEleitosOrdenados->size()*100;
+    float percentualEntre40e50 = (float)entre40e50/(float)candidatosEleitosOrdenados->size()*100;
+    float percentualEntre50e60 = (float)entre50e60/(float)candidatosEleitosOrdenados->size()*100;
+    float percentualMaiorQue60 = (float)maiorQue60/(float)candidatosEleitosOrdenados->size()*100;
 
     cout << "Eleitos, por faixa etária (na data da eleição):" << endl;
     cout << "      Idade < 30: " << menorQue30 << " (" << percentualMenorQue30 << "%)" << endl;
@@ -500,7 +506,7 @@ void Relatorios::gerarRelatorio10()
     cout << "Eleitos, por gênero:" << endl;
     int qtdMasculino = 0, qtdFeminino = 0;
 
-    for(Candidato* candidato : candidatosEleitosOrdenados){
+    for(Candidato* candidato : *candidatosEleitosOrdenados){
         if(candidato==NULL)
             continue;
         if(candidato->getGenero() == 2)
@@ -509,8 +515,8 @@ void Relatorios::gerarRelatorio10()
             qtdFeminino++;
     }
 
-    float percentualMasculino = (float)qtdMasculino/(float)candidatosEleitosOrdenados.size()*100;
-    float percentualFeminino = (float)qtdFeminino/(float)candidatosEleitosOrdenados.size()*100;
+    float percentualMasculino = (float)qtdMasculino/(float)candidatosEleitosOrdenados->size()*100;
+    float percentualFeminino = (float)qtdFeminino/(float)candidatosEleitosOrdenados->size()*100;
 
     cout << "Feminino: " << qtdFeminino << " (" << percentualFeminino << "%)" << endl;
     cout << "Masculino: " << qtdMasculino << " (" << percentualMasculino << "%)" << endl;
@@ -518,12 +524,12 @@ void Relatorios::gerarRelatorio10()
 
 void Relatorios::gerarRelatorio11(){
     int votosNominais = 0, votosLegenda = 0;
-    for(Candidato* candidato : candidatosOrdenados){
+    for(Candidato* candidato : *candidatosOrdenados){
         if(candidato==NULL)
             continue;
         votosNominais += candidato->getVotos();
     }
-    for(Partido* partido : partidosOrdenados){
+    for(Partido* partido : *partidosOrdenados){
         if(partido==NULL)
             continue;
         votosLegenda += partido->getVotosLegenda();
@@ -535,4 +541,9 @@ void Relatorios::gerarRelatorio11(){
     cout << "Total de votos válidos: " << votosNominais + votosLegenda << endl;
     cout << "Total de votos nominais:   " << votosNominais << " (" << percentualVotosNominais << "%)" << endl;
     cout << "Total de votos de legenda: " << votosLegenda << " (" << percentualVotosLegenda << "%)" << endl;
+}
+
+Relatorios::~Relatorios()
+{
+    
 }
